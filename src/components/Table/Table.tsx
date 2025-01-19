@@ -1,10 +1,10 @@
 import ColumnHeader from "./ColumnHeader/ColumnHeader";
 import css from "./Table.module.css";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 // import ColumnHeader from "../ColumnHeader/ColumnHeader";
 // import { IUser } from "../../types";
 
-export type DataSource = Record<string, string | number>;
+export type Row = Record<string, string | number>;
 
 type Column = {
   title: string;
@@ -12,25 +12,50 @@ type Column = {
   key: string;
 };
 
-export type Sort = { name: string; asc: boolean };
+export type SortOptions = { name: string; asc: boolean };
+export type FilterOptions = { name: string; filter: string };
 
 type Props = {
-  dataSource: DataSource[];
+  rows: Row[];
   columns: Column[];
 };
 
-const Table: FC<Props> = ({ dataSource, columns }) => {
+const Table: FC<Props> = ({ rows, columns }) => {
   // const users = data;
-  // const [filteredUsers, setFilteredUsers] = useState<IUser[]>(users);
-  // const [displayedUsers, setDisplayedUsers] = useState<IUser[]>([]);
-  const sort: Sort = { name: "name", asc: true };
+  const [filterOptions, setFilterOptions] = useState<FilterOptions[]>(
+    columns.map((column: Column) => ({
+      name: column.dataIndex,
+      filter: "",
+    }))
+  );
+  const [sortOptions, setSortOptions] = useState<SortOptions>({
+    name: "name",
+    asc: true,
+  });
+  const [filteredRows, setFilteredRows] = useState<Row[]>(rows);
+  const [displayedRows, setDisplayedRows] = useState<Row[]>([]);
+
   // const filters = { name: "", username: "", email: "", phone: "" };
 
-  // useEffect(() => {
-  //   setFilteredUsers(
-  //     users.filter((user: IUser) => {
-  //       return (
-  //         user.name.toLowerCase().includes(filters.name.toLowerCase()) &&
+  useEffect(() => {
+    console.log("filterOption.filter", filterOptions);
+
+    setFilteredRows(
+      rows?.filter((row: Row) => {
+        return filterOptions.some((filterOption: FilterOptions) => {
+          const value = row[filterOption.name as keyof Row];
+          return (
+            value &&
+            value
+              .toString()
+              .toLowerCase()
+              .includes(filterOption.filter.toLowerCase())
+          );
+        });
+      })
+    );
+  }, [rows, columns, filterOptions]);
+  //         user[filterOptions.name].toLowerCase().includes(filterOptions.filter.toLowerCase()) &&
   //         user.username
   //           .toLowerCase()
   //           .includes(filters.username.toLowerCase()) &&
@@ -41,41 +66,54 @@ const Table: FC<Props> = ({ dataSource, columns }) => {
   //   );
   // }, [filters, users]);
 
-  // useEffect(() => {
-  //   if (sort.asc) {
-  //     setDisplayedUsers(
-  //       [...filteredUsers].sort((a, b) => {
-  //         return a[sort.name].toString().localeCompare(b[sort.name].toString());
-  //       })
-  //     );
-  //   } else {
-  //     setDisplayedUsers(
-  //       [...filteredUsers].sort((a, b) => {
-  //         return b[sort.name].toString().localeCompare(a[sort.name].toString());
-  //       })
-  //     );
-  //   }
-  // }, [filteredUsers, sort]);
+  useEffect(() => {
+    console.log("filteredRows", filteredRows);
+
+    if (sortOptions.asc) {
+      setDisplayedRows(
+        [...filteredRows].sort((a, b) => {
+          return a[sortOptions.name]
+            .toString()
+            .localeCompare(b[sortOptions.name].toString());
+        })
+      );
+    } else {
+      setDisplayedRows(
+        [...filteredRows].sort((a, b) => {
+          return b[sortOptions.name]
+            .toString()
+            .localeCompare(a[sortOptions.name].toString());
+        })
+      );
+    }
+  }, [filteredRows, sortOptions]);
 
   return (
     <div className={css.wrapper}>
       <table className={css.table} cellPadding={0} cellSpacing={0}>
         <thead>
           <tr className={css.row}>
-            {columns.map(({ title, key }) => (
+            {columns.map(({ title, dataIndex, key }) => (
               <th className={css.cell} key={key}>
-                <ColumnHeader columnName={title} sort={sort} />
+                <ColumnHeader
+                  columnName={title}
+                  dataIndex={dataIndex}
+                  sortOptions={sortOptions}
+                  setSortOptions={setSortOptions}
+                  filterOptions={filterOptions}
+                  setFilterOptions={setFilterOptions}
+                />
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {dataSource.map((row: DataSource, id) => {
+          {displayedRows.map((row: Row, id: number) => {
             return (
               <tr key={id} className={css.row}>
                 {columns.map(({ dataIndex, key }) => (
                   <td className={css.cell} key={key}>
-                    {key in row && row[dataIndex as keyof DataSource]}
+                    {key in row && row[dataIndex as keyof Row]}
                   </td>
                 ))}
               </tr>

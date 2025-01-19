@@ -1,9 +1,9 @@
-import "./App.css";
-import Table, { DataSource } from "./components/Table/Table";
+import Table, { Row } from "./components/Table/Table";
 import { usersData } from "./data/users";
+import "./index.css";
 
 function App() {
-  const data = usersData as DataSource[];
+  const data = usersData as Row[];
 
   const columns = [
     {
@@ -34,8 +34,8 @@ function App() {
   ];
 
   return (
-    <div>
-      <Table dataSource={data} columns={columns} />
+    <div className="container">
+      <Table rows={data} columns={columns} />
     </div>
   );
 }
