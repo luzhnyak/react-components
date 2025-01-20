@@ -24,14 +24,16 @@
 
 .inputWrapper {
   position: relative;
+  box-sizing: border-box;
 }
 
 .inputFilter {
+  box-sizing: border-box;
   display: block;
   width: 100%;
   border: 1px solid #dee2e6;
   background-color: transparent;
-  padding: 8px 4px;
+  padding: 8px 32px 8px 4px;
   font-size: 16px;
   line-height: 20px;
 }

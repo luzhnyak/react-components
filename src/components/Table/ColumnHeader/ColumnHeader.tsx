@@ -2,11 +2,11 @@ import { FC } from "react";
 
 import x from "../img/x.svg";
 import css from "./ColumnHeader.module.css";
-import { FilterOptions, Row, SortOptions } from "../Table";
+import { Column, FilterOptions, SortOptions } from "../Table";
 
 interface IProps {
-  columnName: string;
-  dataIndex: keyof Omit<Row, "id">;
+  column: Column;
+  showFilter: boolean;
   sortOptions: SortOptions;
   setSortOptions: (sortOptions: SortOptions) => void;
   filterOptions: FilterOptions[];
@@ -14,8 +14,8 @@ interface IProps {
 }
 
 const ColumnHeader: FC<IProps> = ({
-  columnName,
-  dataIndex,
+  column,
+  showFilter,
   sortOptions,
   setSortOptions,
   filterOptions,
@@ -27,46 +27,55 @@ const ColumnHeader: FC<IProps> = ({
     <>
       <button
         className={css.btnSort}
-        onClick={() =>
-          setSortOptions({ name: sortOptions.name, asc: !sortOptions.asc })
-        }
+        onClick={() => {
+          if (column.type !== "number" && column.type !== "string") return;
+          setSortOptions({ name: column.dataIndex, asc: !sortOptions.asc });
+        }}
+        title={`Sort by ${column.title}`}
       >
-        <span className={css.title}>{columnName}</span>
-        {sortOptions.name === dataIndex && (
+        <span className={css.title}>{column.title}</span>
+        {sortOptions.name === column.dataIndex && (
           <span className={css.ascSymbol}>{ascSymbol}</span>
         )}
       </button>
-      <div className={css.inputWrapper}>
-        <input
-          type="text"
-          className={css.inputFilter}
-          id={dataIndex}
-          name={dataIndex}
-          value={
-            filterOptions.filter((filter) => filter.name === dataIndex)[0]
-              ?.filter
-          }
-          onChange={(event) => {
-            setFilterOptions([
-              ...filterOptions.filter((filter) => filter.name !== dataIndex),
-              { name: dataIndex, filter: event.target.value },
-            ]);
-          }}
-        />
-        <button
-          className={css.clearInputBtn}
-          type="button"
-          onClick={() => {
-            console.log("Clear input");
-            setFilterOptions([
-              ...filterOptions.filter((filter) => filter.name !== dataIndex),
-              { name: dataIndex, filter: "" },
-            ]);
-          }}
-        >
-          <img src={x} alt="Clear" width={24} height={24} />
-        </button>
-      </div>
+      {showFilter && (
+        <div className={css.inputWrapper}>
+          <input
+            type="text"
+            className={css.inputFilter}
+            id={column.dataIndex}
+            name={column.dataIndex}
+            value={
+              filterOptions.filter(
+                (filter) => filter.name === column.dataIndex
+              )[0]?.filter
+            }
+            onChange={(event) => {
+              setFilterOptions([
+                ...filterOptions.filter(
+                  (filter) => filter.name !== column.dataIndex
+                ),
+                { name: column.dataIndex, filter: event.target.value },
+              ]);
+            }}
+          />
+          <button
+            className={css.clearInputBtn}
+            type="button"
+            onClick={() => {
+              setFilterOptions([
+                ...filterOptions.filter(
+                  (filter) => filter.name !== column.dataIndex
+                ),
+                { name: column.dataIndex, filter: "" },
+              ]);
+            }}
+            title="Clear filter"
+          >
+            <img src={x} alt="Clear filter" width={24} height={24} />
+          </button>
+        </div>
+      )}
     </>
   );
 };

@@ -1,41 +1,20 @@
-import Table, { Row } from "./components/Table/Table";
-import { usersData } from "./data/users";
+import Table from "./components/Table/Table";
+import { columnsUsers, users } from "./data/users";
+import { columnsFoodProducts, foodProducts } from "./data/foodProducts";
+
 import "./index.css";
 
 function App() {
-  const data = usersData as Row[];
-
-  const columns = [
-    {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
-    },
-  ];
-
   return (
     <div className="container">
-      <Table rows={data} columns={columns} />
+      <h2>Users</h2>
+      <Table rows={users} columns={columnsUsers} />
+      <h2>Food Products</h2>
+      <Table
+        rows={foodProducts}
+        columns={columnsFoodProducts}
+        showFilter={false}
+      />
     </div>
   );
 }

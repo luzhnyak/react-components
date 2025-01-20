@@ -1,4 +1,37 @@
-export const usersData = [
+export const columnsUsers = [
+  {
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
+    type: "number",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    type: "string",
+  },
+  {
+    title: "Username",
+    dataIndex: "username",
+    key: "username",
+    type: "string",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+    type: "string",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+    key: "phone",
+    type: "string",
+  },
+];
+
+export const users = [
   {
     id: 1,
     name: "Leanne Graham",
