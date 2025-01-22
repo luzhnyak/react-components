@@ -1,4 +1,5 @@
 import EditBtn from "../components/EditBtn/EditBtn";
+import { Popconfirm } from "../components/Popconfirm/Popconfirm";
 
 export const columnsFoodProducts = [
   {
@@ -39,13 +40,21 @@ export const foodProducts = [
     quantity: 50,
     price: 15.5,
     weight: 200,
-    // action: null,
+    action: (
+      <Popconfirm
+        title="Видалиння елементу"
+        description="Ви впевнені, що хочете видалити цей елемент?"
+        onConfirm={() => console.log("Deleted")}
+      >
+        <EditBtn />
+      </Popconfirm>
+    ),
   },
   {
     name: "Хліб",
     quantity: 30,
     price: 25.0,
-    // weight: 500,
+    weight: 500,
     action: <EditBtn />,
   },
   {
