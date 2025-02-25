@@ -55,14 +55,30 @@ export const foodProducts = [
     quantity: 30,
     price: 25.0,
     weight: 500,
-    action: <EditBtn />,
+    action: (
+      <Popconfirm
+        title="Видалиння елементу"
+        description="Ви впевнені, що хочете видалити цей елемент?"
+        onConfirm={() => console.log("Deleted")}
+      >
+        <EditBtn />
+      </Popconfirm>
+    ),
   },
   {
     name: "Молоко",
     quantity: 20,
     price: 32.0,
     weight: 1000,
-    action: <EditBtn />,
+    action: (
+      <Popconfirm
+        title="Видалиння елементу"
+        description="Ви впевнені, що хочете видалити цей елемент?"
+        onConfirm={() => console.log("Deleted")}
+      >
+        <EditBtn />
+      </Popconfirm>
+    ),
   },
   {
     name: "Картопля",
@@ -72,7 +88,7 @@ export const foodProducts = [
     action: <EditBtn />,
   },
   {
-    // name: "Сир",
+    name: "Сир",
     quantity: 15,
     price: 200.0,
     weight: 300,

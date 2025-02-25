@@ -23,6 +23,7 @@ function App() {
       <h2>Users</h2>
       <Table rows={users} columns={columnsUsers} />
       <h2>Food Products</h2>
+
       <Table
         rows={foodProducts}
         columns={columnsFoodProducts}
