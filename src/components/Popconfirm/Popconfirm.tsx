@@ -1,5 +1,6 @@
 import React, { FC, isValidElement, ReactElement, useState } from "react";
 import Modal from "../Modal/Modal";
+import css from "./Popconfirm.module.css";
 
 type Props = {
   title: string;
@@ -51,13 +52,20 @@ export const Popconfirm: FC<Props> = ({
       {modifiedChildren}
       {isOpen && (
         <Modal onClose={handleClose}>
-          <div>{title}</div>
-          <div>
+          <div className={css.title}>{title}</div>
+          <div className={css.description}>
             <div>{description}</div>
           </div>
-          <div>
-            <button onClick={handleOk}>{okText}</button>
-            <button onClick={handleClose}>{cancelText}</button>
+          <div className={css.btnContainer}>
+            <button className={css.btn} onClick={handleOk}>
+              {okText}
+            </button>
+            <button
+              className={[css.btn, css.btnCancel].join(" ")}
+              onClick={handleClose}
+            >
+              {cancelText}
+            </button>
           </div>
         </Modal>
       )}
