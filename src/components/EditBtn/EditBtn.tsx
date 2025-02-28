@@ -1,4 +1,4 @@
-import css from "./Modal.module.css";
+import css from "./EditBtn.module.css";
 
 type Props = {
   onClick?: () => void;
